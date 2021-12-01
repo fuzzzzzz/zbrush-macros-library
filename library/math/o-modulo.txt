@@ -1,0 +1,31 @@
+/*
+ @ Version : 0.1
+ @ Status : TODO
+ @ Purpose : 
+ * 	Math Stuff, get modulo of a divide operation
+ *	
+ */
+
+[RoutineDef, GetModulo,
+
+    [VarSet, result, -1]
+    [VarSet, test, [Val, INT(a)/INT(b)]]
+    [If, test == 0,
+        [VarSet, result, 0]
+        ,//else
+        [VarSet, result, [Val, INT(a)-(INT(b)*INT(b))]]
+
+    ]
+
+,a,b,result]
+
+[IButton, "???", "Get the Modulo of a divide operation.",
+    // [VarSet, input, 25]
+
+    [VarSet, a, [StrAsk, "26","please enter a valid numeric value"]]
+    [VarSet, b, [StrAsk, "5","please enter a valid numeric value"]]
+    [VarSet, result, -1]
+
+    [RoutineCall, GetModulo, a, b, result]
+    [Note, result]
+,,1]

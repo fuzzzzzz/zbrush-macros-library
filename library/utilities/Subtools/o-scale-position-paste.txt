@@ -1,0 +1,38 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : [ "subtool", "scale", "size", "position", "MemGetSize", "MVarDef", "MVarGet",
+            "IGetID", "IGetTitle", "VarInc", ]
+ @ Status : to complete
+ @ Purpose : 
+ *     Paste transform data that are stored in memory.
+ * Note :
+ *  + enable DEBUG Variable to see the debug information
+ *  + comment the code
+ */
+
+[VarSet, DEBUG, 0]
+
+[RoutineDef, paste_scale_position,
+    // check if something is in memory
+    [If, [MemGetSize, transform] > 0,
+        // Get the winid of X position and iterate on that to make it simpler.
+        [VarSet, winid, [IGetID, "Tool:Geometry:X Position"]]
+        
+        [If, DEBUG, [Note, [StrMerge, "the winid is : ", winid, "\n"],,-1]]
+        //copy all value if the winid range of 239 > 245 
+        [Loop, 7,
+            [VarSet, temp, [IGetTitle, winid, 1]]
+            [ISet, winid, [MVarGet, transform, n]]
+            [If, DEBUG, [Note, [StrMerge, n , " >> ", winid, " >> ", [MVarGet, transform, n], "\n"],,-1]]
+            [VarInc, winid]
+        ,n]
+        [If, DEBUG, [Note,]]
+        ,//else
+        [Note, "Cannot paste data. Abort..."]
+    ]    
+]
+
+[IButton, "???", "copy scale and position of the current subtool",
+    [RoutineCall, paste_scale_position]
+,,1]

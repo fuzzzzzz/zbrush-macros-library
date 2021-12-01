@@ -1,0 +1,25 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : ["mesh", "Loop", "SubToolGetCount", "IToggle"]
+ @ Status : released
+ @ Purpose : 
+ *  Toggle between dynamic On/Off
+ * Todo :
+ *  + comment the process
+ */
+
+[RoutineDef, toggleDynamicSubD,
+
+    [If, [IGet, "Transform:Edit"],
+        [Loop, [SubToolGetCount],
+            [SubToolSelect, n]
+            [IToggle, "tool:geometry:s.dynamic"]        
+        ,n]
+    ]
+]
+
+[IButton, "???", "Turn On Dynamic Subdivision for each subtool.",
+
+    [RoutineCall, toggleDynamicSubD]
+,,1]

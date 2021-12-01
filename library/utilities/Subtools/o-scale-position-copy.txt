@@ -1,0 +1,36 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : [ "subtool", "scale", "size", "", "MemDelete", "MVarDef", [IGet],
+            "IGetID", "IGetTitle", "VarInc", ]
+ @ Status : to complete
+ @ Purpose : 
+ *     Copy transform data and store them into persitent memory block.
+ * Note :
+ *  + enable DEBUG Variable to see the debug information
+ *  + comment the code
+ */
+
+
+[VarSet, DEBUG, 0]
+
+[RoutineDef, copy_scale_position,
+    //cleanup
+    [MemDelete, transform]
+    [MVarDef, transform, 7, 0] // init at 0
+    // Get the winid of X position and iterate on that to make it simpler.
+    [VarSet, winid, [IGetID, "Tool:Geometry:X Position"]]
+    [If, DEBUG, [Note, [StrMerge, "the winid is : ", winid, "\n"],,-1]]
+    //copy all value if the winid range of 239 > 245 
+    [Loop, 7,
+        [VarSet, temp, [IGetTitle, winid,1]]
+        [MVarSet, transform, n, [IGet, temp]]
+        [If, DEBUG, [Note, [StrMerge, n , " >> ", winid, " >> ", [IGet, temp], "\n"],,-1]]
+        [VarInc, winid]
+    ,n]
+    [If, DEBUG, [Note,]]
+]
+
+[IButton, "???", "copy scale and position of the current subtool.",
+    [RoutineCall, copy_scale_position]
+,,1]

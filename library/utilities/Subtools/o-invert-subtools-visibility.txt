@@ -1,0 +1,48 @@
+/*
+ * Macro To inverse the subtool visibility
+ *
+ * NOTE : 
+ *   Set OUTPUT Value to 1 to enable note Feedback fro Debugging.
+ */
+
+[VarDef, OUTPUT, 1]
+
+
+[RoutineDef, SubToolIsVisible,
+    /*
+     *  A routine to check if the current active subtool is visible or not.
+     *  then it reverses the visibility status.
+     */
+	[VarSet, isVisible, 0]
+	[VarSet, index,[SubToolGetActiveIndex]]
+	[VarSet, subtool,[SubToolGetStatus, index]]
+	[VarSet, folderIndex,[SubToolGetFolderIndex, index]]
+	[If,(folderIndex > -1),
+        //folder
+		[VarSet,subtoolFolder,[SubToolGetStatus,folderIndex]]// for folder visibility
+		[If,([Val,subtoolFolder]&0x2 == 0x2)&&([Val,subtool]&0x1 == 0x1),
+			[VarSet,isVisible,1]
+            [SubToolSetStatus, index, 0x2]
+		]
+		,//not a folder
+		[If,([Val,subtool]&0x1 == 0x1),
+			[VarSet,isVisible,1]
+            [SubToolSetStatus, index, 0x0]
+            ,//else
+            [VarSet,isVisible,0]
+            [SubToolSetStatus, index, 0x1]
+		]	
+	]
+,isVisible]
+
+[IButton, "???", "Toogle/Invert Subtools Visibility",
+    [Loop, [SubToolGetCount],
+        // [Note, "plop"]
+        [SubToolSelect, n]
+        [VarSet, subtoolTitle, [IGetTitle, "Tool:subtool:Current Tool"]]
+        [VarSet, status, 0]
+        [RoutineCall, SubToolIsVisible, status]
+        [If, OUTPUT, [Note, [StrMerge, subtoolTitle, " > " , status, "\n"],,-1]]
+    ,n]
+    [If, OUTPUT, [Note, ]]
+,,1]

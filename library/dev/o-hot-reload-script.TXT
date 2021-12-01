@@ -1,0 +1,28 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : ["hotreload", "plugin", "script", "ICLose", "IExists", "FileNameSetNExt", "IPress"]
+ @ Status : released
+ @ Purpose : "Hot Reload a script or a plugin with Ui interface without to restart ZBrush."
+ */
+
+[RoutineDef, reload_zscript,
+
+	// first check if the subpalette exists	
+	[If, [IExists, "Zplugin:Plugin Name"],
+		// then remove it from the UI.
+		[IClose, "Zplugin:Plugin Name"]
+	]
+
+	// set the path to the script or plugins
+	[FileNameSetNext, "ZBRUSH_ZSTARTUP\ZPlugs64\plugin_name.txt"]
+
+	// then load the zscript with that path.
+	[IPress, "ZScript:load"]
+]
+
+[IButton,"???","Hot Reload a script or a plugin with Ui interface without to restart ZBrush.",
+	[IShowActions,0]
+	[IConfig,2020]
+	[RoutineCall, reload_zscript]
+]

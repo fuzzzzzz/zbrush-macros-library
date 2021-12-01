@@ -1,0 +1,82 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : [ "path", "win", "mac", "StrLength", "StrFromAsc", "StrMerge", "StrFind",
+            "FileExists", "FileDelete", "IPress", "MemCreate", "MemWriteString",
+            "MemResize", "MemSaveToFile" ]
+ @ Status : released
+ @ Purpose : "Convert Path to wompatible windows path, or Unix filepath scheme."
+ @ Tip : with [FileNameResolvePath,] we get the current running script filepath on the disk.
+ */
+
+
+
+[RoutineDef, unix_path,
+    [VarSet, result, ""]
+
+    [Loop, [StrLength, path],
+        // iterate on the strings character
+        [VarSet, char, [StrExtract, path,n,n]]
+        // check if the current char is a backslash
+        [VarSet, target, [StrFind, [StrFromAsc, 92], char]]
+
+        [If, (target == 0 ),
+            // if the current char is a backslash,
+            [VarSet, result, [StrMerge, result, [StrFromAsc, 47]]]
+            ,//else
+            // yield the current char if it's not a backslash
+            [VarSet, result, [StrMerge, result, char]]
+        ]
+    ,n]
+    [If, [FileExists, ".data/unix_path.abc"], [FileDelete, ".data/unix_path.txt"]]
+    
+    [MemCreate, output, 255]
+    [MemWriteString, output, result, 0]
+    [MemResize, output, [StrLength, result]]
+    [MemSaveToFile, output, ".data/unix_path.txt"]
+    [MemDelete, output]
+
+,path]
+
+[RoutineDef, win32_path,
+    [VarSet, result, ""]
+
+    [Loop, [StrLength, path],
+
+        [VarSet, char, [StrExtract, path,n,n]]
+        [VarSet, backslash, [StrFind, [StrFromAsc, 92], char]]
+        [VarSet, forwardslash, [StrFind, [StrFromAsc, 47], char]]
+
+        [If, (backslash == 0 ),
+            // if the current char is a backslash, then double it.
+            [VarSet, result, [StrMerge, result, [StrFromAsc, 92], [StrFromAsc, 92]]]
+            ,//else
+            [If, (forwardslash == 0),
+                // if the current char is a backslash, then double it.
+                [VarSet, result, [StrMerge, result, [StrFromAsc, 92], [StrFromAsc, 92]]]
+                ,//else
+                // yield the current char if it's not a backslash
+                [VarSet, result, [StrMerge, result, char]]
+            ]
+        ]
+    ,n]
+    [If, [FileExists, ".data/win32_path.txt"], [FileDelete, ".data/win32_path.txt"]]
+    
+    [MemCreate, output, 255]
+    [MemWriteString, output, result, 0]
+    [MemResize, output, [StrLength, result]]
+    [MemSaveToFile, output, ".data/win32_path.txt"]
+    [MemDelete, output]
+
+,path]
+
+[RoutineDef, get_zscript_filename, 
+    [VarSet, filename, [FileNameResolvePath,]]
+    [RoutineCall, unix_path, filename]
+    [RoutineCall, win32_path, filename]
+    [Note, filename,,,,,[TextCalcWidth, filename]]
+]
+
+[IButton, "???", "Get the current zscript file path",
+    [RoutineCall, get_zscript_filename]
+]

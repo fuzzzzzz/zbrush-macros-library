@@ -1,0 +1,32 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : ["save", "dialog", "export", "FileNameAsk", "FileNameSetNext", "IKeyPress", "Exit", "IPress"]
+ @ Status : Released
+ @ Purpose : 
+ *		Open the user file Save dialog.
+ *  	the user define the path that will be use to save
+ * 		to the current subtool with [IPress] on Tool:Export.
+ * Todo :
+ + 	comment the code
+ */
+
+
+[IButton,"???","Open the user file Save dialog.",
+[IShowActions,0]
+[IConfig,2020]
+
+	// [VarSet, export_goz, [FileNameAsk, "GoZ with matcaps" , "filename.goz","DO NOT EDIT THE FILENAME, save it on the desire Export Directory "]]
+	
+	[VarSet, export, [FileNameAsk, "OBJ Extended *.obj" , ".data/filename.obj","DO NOT EDIT THE FILENAME, save it on the desire Export Directory "]]
+
+	[If, ( [StrLength, export ] == 0 )//110
+	 	,//commands		
+		[IKeyPress, 110]
+		[Exit]
+	]
+	[Note, export]
+	[FileNameSetNext, export]
+	[IPress, "Tool:Export"]
+
+]

@@ -1,0 +1,25 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : ["mesh", "subtool", "Loop", "SubToolGetCount", "IUnPress"]
+ @ Status : released
+ @ Purpose : 
+ *  Turn Off dynamic subdivision on all subtools
+ * Todo :
+ *  + comment the process
+ */
+
+[RoutineDef, turnOffDynamicSubD,
+
+    [If, [IGet, "Transform:Edit"],
+        [Loop, [SubToolGetCount],
+            [SubToolSelect, n]
+            [IUnPress, "tool:geometry:s.dynamic"]        
+        ,n]
+    ]
+]
+
+[IButton, "???", "Turn On Dynamic Subdivision for each subtool.",
+
+    [RoutineCall, turnOffDynamicSubD]
+,,1]

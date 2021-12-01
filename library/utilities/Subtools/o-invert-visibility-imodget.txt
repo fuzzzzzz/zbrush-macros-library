@@ -1,0 +1,32 @@
+/*
+ * Macro To inverse the subtool visibility
+ *
+ * NOTE : if you cannot ensure each subtool has a unique name,
+ * then you should use the alertnative method using 
+ * [SubToolGetStatus] and [SubToolSetStatus]
+ * instead of [IModGet] and [IModSet].
+ * Set OUTPUT Value to 1 to enable note Feedback fro Debugging.
+ */
+
+[VarDef, OUTPUT, 0]
+
+[IButton, "???", "Invert subtools visibility using IModSet.\n Subtools must have an unique name.",
+    // loop till we have some subtool in the list
+    [Loop, [SubToolGetCount],
+        // select the very first subtool
+        [SubToolSelect, n]
+        // Get the name of the current Subtool
+        [VarSet, subtool, [IGetTitle, "Tool:subtool:Current Tool"]]
+        [VarSet, result, [IModGet, [StrMerge,"tool:subtool:", subtool]]]
+        
+        [If, ([IModGet,[StrMerge,"tool:subtool:", subtool]]&32 == 32),
+            [If, OUTPUT, [Note, [StrMerge, subtool, " > visible\n"],,-1]]
+            [IModSet, [StrMerge,"tool:subtool:", subtool], result-32]
+            ,//else
+            [If, OUTPUT, [Note, [StrMerge, subtool, " > not visible\n"],,-1]]
+            [IModSet, [StrMerge,"tool:subtool:", subtool], result+32]
+        ]
+    ,n]
+    [If, OUTPUT, [Note, ]]
+
+,,1]

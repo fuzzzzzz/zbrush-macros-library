@@ -1,0 +1,21 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : ["polygroups", "CanvasClick", "IKeyPress", "MouseHPos", "MouseVPos"]
+ @ Status : Release
+ @ Purpose : 
+ *		Select the polygroup under the cursor.
+ * Todo :
+ + 	comment the code
+ */
+
+[IButton,"???","Only work with hotkey assigned !\nSelect the polygroup under the cursor.",
+
+// Use Ifreeze to freeze the ZBrush UI
+[IFreeze, 
+
+    // do the SHIFT+CTRL CLick on the canvas at the horizontal/vertical postion of the cursor.
+    [IKeyPress,SHIFT+CTRL,[CanvasClick,[MouseHPos],[MouseVPos]]]
+]//end IFREEZE
+
+,,1]

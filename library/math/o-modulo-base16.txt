@@ -1,0 +1,22 @@
+/*
+ @ Version : 1.0
+ @ Status : released
+ @ Purpose : 
+ * 	Math Stuff, get modulo on base16 
+ * Usage : for conversion from Decimal to Hexadecimal/octal/binary
+ */
+
+[RoutineDef, modulo,
+	[VarSet, modulo, -1]
+	[VarSet, temp, input]
+	[VarSet, x, [Val, INT(input / 16)]]
+	[VarSet, modulo, [Val, temp - (16 * x)]]
+
+,input, modulo]
+
+[IButton, "???", "Get Modulo in Base16",
+    [VarSet, result, -1]
+    [VarSet, input, [StrAsk, "256", "please enter a valid numerical value."]]
+    [RoutineCall, modulo, input, result]
+	[Note, result]
+,,1]

@@ -1,0 +1,49 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : [ "delete", "file", "FileExists", "FileDelete", "MessageYesNoCancel", "MemCreate",
+            "MemWriteString", "MemSaveToFile", "MemDelete" ]
+ @ Status : released
+ @ Purpose : "Delete a file at a given `path`."
+ */
+
+// set the DEBUG mode to see the note message as feedback.
+[VarDef, DEBUG, 1]
+
+[RoutineDef, delete_a_file,
+    [VarSet, file, path]
+    [If, [FileExists,file],
+        [VarSet, delete, [FileDelete, file]]
+        [Note, "The file has been deleted."]
+        ,//else
+        [VarSet, result, [MessageYesNoCancel, "The file to delete do not exists, would you like to create it ?"]]
+        [If, DEBUG, [Note, [StrMerge, "the result is : ", result]]]
+        
+        [If, result == 0, // no
+            [Note, "The file has not been created."]
+            [Exit]
+        ]
+        [If, result == 1, // yes
+            [Note, ">> Create the file...\n>> Next Time you run the macro, it will delete the file."]
+        ]
+        [If, result == -1, // cancel
+            [Note, "Canceled by the user..."]
+            [Exit]
+        ]
+        // create a message text
+        [VarSet, message, "this is a file for deleting using Zscript."]
+        // create a memblock of the same size of the message lenght and store the message
+        [MemCreate, tmp_memblock, [StrLength, message]]
+        // write the message at memblock offset 0
+        [MemWriteString, tmp_memblock,message,0,1]
+        // Save the memblock to the disk 
+        [MemSaveToFile, tmp_memblock, file, 1]
+        // delete the memblock has memblock are persistent.
+        [MemDelete, tmp_memblock]
+    ]
+,path]
+
+[IButton, "???", "Delete a file.",
+    [VarSet, path, ".data/delete-me.txt"]
+    [RoutineCall, delete_a_file, path]
+]

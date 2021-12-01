@@ -1,0 +1,31 @@
+/*
+ @ Version : 1.0
+ @ Requirement : ["python 3.6 or higher" ]
+ @ Category : Learning
+ @ Tags : ["shell", "image", "texture","ShellExecute", "FileNameResolvePath", "StrFromAsc"]
+ @ Status : Release
+ @ Purpose : 
+ *		Execute a python program using ShellExecute (need python installed).
+ */
+
+[IButton, "???","Execute a command Shell (need python installed).",
+[IShowActions,0]
+[IConfig,2020]
+
+	// to ensure a path that could contain white space will be properly read
+	// we must to encapsulate the path within double quote.
+	// to do it we can't to pass a character to escape like \"
+	// so the only way possible is to inject character based on
+	// the ascii table using [StrFromAsc] command.
+	// reference : http://www.asciitable.com
+
+	[VarSet, quote, [StrFromAsc, 34]]
+	
+	// 1. on Windows, use START so the terminal should not display
+	// 2. use pythonw.exe instead of python.exe (python path must be in PATH environment variable)
+	// 3. full script path surrounded by double quote if the path do contains whitespaces.
+
+	[VarSet, filename, [FileNameResolvePath, "ZBRUSH_ZSTARTUP\Macros\Lib\OS\.data\tkinter_app.py"]]
+	[ShellExecute, [StrMerge, "start ", "pythonw ", quote, filename, quote]]
+	
+,0,1]

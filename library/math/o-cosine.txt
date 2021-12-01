@@ -1,0 +1,26 @@
+/*
+ @ Version : 1.0
+ @ Status : Released
+ @ Purpose : 
+ *	Get the Cosine of a given angle
+ *	Useful as COS() is broken since ZBrush 2018
+ */
+[RoutineDef,COSINE,
+	[VarSet,OPP,TAN(angle)]
+	[If,ABS(angle)<=90,
+		[VarSet,HYP,SQRT((1^^2)+(OPP^^2))]
+		,
+		[VarSet,HYP,-SQRT((1^^2)+(OPP^^2))]
+	]
+	[VarSet,COS,1/HYP]
+,angle,COS]
+
+[IButton,"???","Get Sine",
+	[IShowActions,0]
+	[IConfig,2020]
+	[VarSet, angle, [StrAsk, "Please type a numeric value.", "blabla"]]
+	[VarSet, result, -1]
+	[RoutineDef, COSINE, angle, result]
+	[note, [StrMerge, "Cosine equals :", result]]
+,,1]
+

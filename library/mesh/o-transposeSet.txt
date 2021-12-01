@@ -1,0 +1,57 @@
+
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : ["subtool", "TransposeSet", "StrAsk", "IPress", "IUnPress", "Note", "Exit"]
+ @ Status : Release
+ @ Purpose : 
+ *		Set the transpose line Lenght in Unit.
+ * Usage : 
+ *      
+ * Todo :
+ + 	comment the code
+ */
+
+[RoutineDef, SetTransPoseLineLength,
+	// [TransposeSet, 0,0,0,0,0,1,2]
+	
+	// first ask the user tthe lenght we want
+	[VarSet, length, [StrAsk, "Please type a numeric value.", "Define the Transpose line length in unit"]]
+
+	// prevent the user to enter 0 this will make the transpose line invisible in the canvas.
+	[If, ([StrFind, lenght, "0"]) && ([StrLength, lenght] == 1),
+		[Note, "The value entered is egal to 0.\nProcess aborted !"]
+		[Exit]
+	]
+	// prevent the user to enter none digit input.
+	// [Loop, [StrLength, lenght],
+	// 	[VarSet, char, [StrExtract, lenght, n,n]]
+
+	// 	[If, [StrFind, lenght, "0"],
+	// 		[Note, "The value entered is not valid. Please enter digital value.\nProcess aborted !"]
+	// 		[Exit]
+	// 	]
+	// ,n]
+	// display the transpose line not the gizmo 3D.
+	[If, [IGet, "Transform:Edit"],
+		[If, [IGet, "Transform:Move"] || [IGet, "Transform:Rotate"] || [IGet, "Transform:Scale"],
+			[If, [IGet, "transform:gizmo 3d"], [IUnPress, "transform:gizmo 3d"]]
+			,//else
+			[IPress, "Transform:Move"]
+			[IUnPress, "Transform:Gizmo 3d"]
+		]
+		// here we just set the value for a single parameter of the TransposeSet	
+		[TransposeSet,,,,,,,length]
+		
+		,//else
+		[Note, "Please drop a tool and enter in edit mode, then retry."]
+	]
+
+]
+
+[IButton, "???", "Set custom transpose Line length.",
+
+[IShowActions,0]
+[IConfig,2020]
+	[RoutineCall, SetTransPoseLineLength]
+]

@@ -1,0 +1,19 @@
+//ZBRUSH MACRO - Recorded in ZBrush version 2020
+[IButton,???,"click and drag test.",
+[IShowActions,0]
+[IConfig,2020]
+	
+	// Skip the warning dialog when returning to 2.5D mode
+	[IKeyPress, '2', [IUnPress, "Transform:Edit"]]
+	// Clear the current layer
+	[IPress, "Layer:Clear"]
+	// swith to a specific tool
+	[IPress, "Tool:Matiere 1"]
+
+	// canvas click at (H*V) H=0*V=0 (center of document) with a drag of H=0 and V=200 with shift holded.
+	[IKeypress, SHIFT, [IClick, 1004, 0, 0, 0, 200]]
+	[IPress, "Transform:Edit"]
+	[SubtoolSelect, 1]
+	[IPress, "Transform:Fit"]
+	[SubtoolSelect, 2]
+]

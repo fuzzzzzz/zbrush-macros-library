@@ -1,0 +1,36 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : ["string", "text", "file","Loop", "LoopExit", "StrExtract", "StrLength", "StrMerge"]
+ @ Status : Release
+ @ Purpose : 
+ *		Iterate on a string varaible
+ */
+
+[RoutineDef, iterate_on_text,
+
+	// infinite loop is not possible as 9999 can't be undefined
+	// which mean we always need to know how many time we want
+	// to iterate on a variable data.
+
+	[Loop, [StrLength, text], //for ever loop
+		[If, ([StrLength, text] == n),
+			// iterate till varsize of views is equal to the counter "n"
+			[LoopExit]
+			,// else
+			[VarSet, char, [StrExtract, text, n,n]]
+			[Note, [StrMerge, n, " > ", char,"\n"],,-1]
+			[LoopContinue]
+		]
+	,n]
+    // display the note
+    [Note, ]
+
+,input]
+
+[IButton, "???", "Iterate on a text.",
+	// create a variable and some text to iterate in a loop.
+    [VarSet, text, "Have a good Sculpting with Zbrush !"]
+	// we pass the text as parameter for the iterate_on_text routine
+    [RoutineCall, iterate_on_text, text]
+,,1]

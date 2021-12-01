@@ -1,0 +1,64 @@
+/*
+ @ Version : 1.0
+ @ Category : Learning
+ @ Tags : ["subtool", "SubToolSelect", "IExists", "Loop", "SubToolGetCount"]
+ @ Status : Release
+ @ Purpose : 
+ *		Select a subtool by his name.
+ * Usage : 
+ *      If you have Two or more subtools with the same name, then only the very first occurences will be founded.
+ *      If 
+ * Todo :
+ + 	comment the code
+ */
+
+// GLOBAL VARIABLES
+[VarSet, quote, [StrFromAsc, 34]]
+
+
+[RoutineDef, Get_Subtool_By_Name,
+    
+    [VarSet, find, 0]
+
+    [VarSet, subToolPath, [StrAsk, "Type a subtool name here.", "Please "]]
+    [VarSet, subToolTarget, [StrMerge, "Tool:Subtool:", subtoolPath]]
+    
+    // Select the very first subtool in the list
+    [SubToolSelect, 0]
+
+    /*  The subtool can be found only if it is displayed in the subtool panel.
+     *   So for exmaple, if visible count is 8(default) and you look for a subtool
+     *   which is in the range of 9th or XXth subtool you will have to move the 
+     *    Subtool scrollbar to display the other subtools.
+     */
+
+    [If, [IExists, subToolTarget],
+        /* easiy context 
+         * the subtool is diplayed in the list and there is no need to move 
+         * the scrollbar to continue the searching.
+         */
+        [IPress,subToolTarget]
+        [VarSet, find, 1]
+        ,// other wise we must to move the subtool scroolbar element
+        [Loop, [SubToolGetCount],
+            // we move the scrollbar with ISet of one item.
+            [ISet,"Tool:SubTool:SubTool ScrollBar",0,[SubToolGetCount]-n]
+            // then we just select the subtool when both names matches and exit the loop.
+            [If, [IExists, subToolTarget],
+                [IPress,subToolTarget]
+                [VarSet, find, 1]
+                [LoopExit]
+            ]
+        ,n]
+
+        [If, find == 0,
+            // in last case every subtool has been compared and no match has been registered.
+            // display a note for the user to inform that we haven't found the subtool in the current tool.
+            [Note, [StrMerge, "Can't found subtool named ", quote, subtoolpath, quote]]
+        ]
+    ]
+]
+
+[IButton, "???", "Select a subtool by Name.",
+    [RoutineCall, Get_Subtool_By_Name]
+,,1]
